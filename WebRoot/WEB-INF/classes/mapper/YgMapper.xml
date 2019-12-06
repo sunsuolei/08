@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 该文件编写mybatis中的mapper接口里面的方法提供对应的sql语句 -->
+<mapper namespace="cn.sm1234.dao.YgMapper">
+
+	<resultMap type="cn.sm1234.domain.Yg" id="resultYg">
+		<id column="yid" property="yid" />
+		<result column="yname" property="yname" />
+		<result column="ruzhi" property="ruzhi" />
+		
+		<result column="roleId" property="role.roleId" />
+		<result column="rname" property="role.rname" />
+	</resultMap>
+	<!-- <sql id="fenye">
+		
+	</sql> -->
+	<select id="selectYg" parameterType="cn.sm1234.domain.Fenye" resultMap="resultYg">
+		SELECT
+			yg.*,role.*
+		FROM
+			yg JOIN role ON yg.roleId = role.roleId 
+		 <where>
+			<if test="min_ruzhi !=null and min_ruzhi !=''">
+				and ruzhi &gt;= #{min_ruzhi}
+			</if>
+			<if test="max_ruzhi !=null and max_ruzhi !=''">
+				and ruzhi &lt;= #{max_ruzhi}
+			</if>
+		</where>
+			ORDER BY yid DESC 
+			LIMIT #{page},#{pageSize}
+	</select>
+	
+	<select id="selectYgCount" parameterType="cn.sm1234.domain.Fenye" resultType="int">
+		SELECT
+			count(1)
+		FROM
+			yg JOIN role ON yg.roleId = role.roleId 
+		<where>
+			<if test="min_ruzhi !=null and min_ruzhi !=''">
+				and ruzhi &gt;= #{min_ruzhi}
+			</if>
+			<if test="max_ruzhi !=null and max_ruzhi !=''">
+				and ruzhi &lt;= #{max_ruzhi}
+			</if>
+		</where>
+			ORDER BY yid DESC 
+	</select>
+</mapper>
